@@ -1,5 +1,8 @@
 import unittest
 from app.flight_trip_class import *
+from app.staff_class import *
+from app.passenger_class import *
+from app.airport_class import *
 
 
 class FlightTripTest(unittest.TestCase):
@@ -32,10 +35,23 @@ class FlightTripTest(unittest.TestCase):
         self.assertEqual(self.flight_trip_1.get_plane(), 'Boeing 767')
 
     def test_add_passenger(self):
-        self.flight_trip_1.add_passenger_to_flight('Roger')
-        self.assertEqual(self.flight_trip_1.get_passenger_list(), ['Roger'])
+        airport_1 = Airport('Madrid')
+        staff_1 = Staff('ABC123', 'Susan', 1, airport_1.get_name())
+        passenger_1 = Passenger('DEF456', 'Peter', '11112222LL')
+
+        self.flight_trip_1.add_passenger_to_flight(staff_1)
+        self.assertEqual(self.flight_trip_1.get_passenger_list()['staff'][0].get_name(), 'Susan')
+        self.flight_trip_1.add_passenger_to_flight(passenger_1)
+        self.assertEqual(self.flight_trip_1.get_passenger_list()['passengers'][0].get_name(), 'Peter')
 
     def test_remove_passenger(self):
-        self.flight_trip_1.set_passenger_list(['Roger', 'Mary'])
-        self.flight_trip_1.remove_passenger_from_flight('Roger')
-        self.assertEqual(self.flight_trip_1.get_passenger_list(), ['Mary'])
+        airport_1 = Airport('Madrid')
+        staff_1 = Staff('ABC123', 'Susan', 1, airport_1.get_name())
+        passenger_1 = Passenger('DEF456', 'Peter', '11112222LL')
+
+        self.flight_trip_1.set_passenger_list({'staff': [staff_1], 'passengers': [passenger_1]})
+        self.flight_trip_1.remove_passenger_from_flight(passenger_1)
+        self.assertEqual(self.flight_trip_1.get_passenger_list()['passengers'], [])
+        self.assertEqual(self.flight_trip_1.get_passenger_list()['staff'][0].get_name(), 'Susan')
+        self.flight_trip_1.remove_passenger_from_flight(staff_1)
+        self.assertEqual(self.flight_trip_1.get_passenger_list()['staff'], [])

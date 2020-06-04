@@ -1,5 +1,6 @@
 import unittest
 from app.staff_class import *
+from app.airport_class import *
 
 
 class StaffTest(unittest.TestCase):
@@ -11,7 +12,8 @@ class StaffTest(unittest.TestCase):
         self.staff_1.set_employee_no(2)
         self.assertEqual(self.staff_1.get_employee_no(), 2)
 
-    def test_get_tax_number(self):
+    def test_get_location(self):
+        airport_1 = Airport('Barcelona')
         self.assertEqual(self.staff_1.get_work_location(), None)
-        self.staff_1.set_tax_number('Barcelona')
-        self.assertEqual(self.staff_1.get_tax_number(), 'Barcelona')
+        self.staff_1.set_work_location(airport_1.get_name())
+        self.assertEqual(self.staff_1.get_work_location(), 'Barcelona')

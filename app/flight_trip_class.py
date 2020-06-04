@@ -1,3 +1,7 @@
+from app.staff_class import *
+from app.passenger_class import *
+
+
 class FlightTrip:
     def __init__(self, origin, destination, duration, plane, passenger_list=None):
         self.__origin = origin
@@ -5,7 +9,7 @@ class FlightTrip:
         self.__duration = duration
         self.__plane = plane
         if passenger_list is None:
-            passenger_list = []
+            passenger_list = {'staff': [], 'passengers': []}
         self.__passenger_list = passenger_list
 
     def get_origin(self):
@@ -39,7 +43,14 @@ class FlightTrip:
         self.__passenger_list = passenger_list
 
     def add_passenger_to_flight(self, passenger):
-        self.__passenger_list.append(passenger)
+        if isinstance(passenger, Staff):
+            self.__passenger_list['staff'].append(passenger)
+        if isinstance(passenger, Passenger):
+            self.__passenger_list['passengers'].append(passenger)
 
     def remove_passenger_from_flight(self, passenger):
-        self.__passenger_list.remove(passenger)
+        if isinstance(passenger, Staff):
+            self.__passenger_list['staff'].remove(passenger)
+        if isinstance(passenger, Passenger):
+            self.__passenger_list['passengers'].remove(passenger)
+
