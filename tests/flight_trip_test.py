@@ -37,6 +37,11 @@ class FlightTripTest(unittest.TestCase):
         self.assertEqual(self.flight_trip_1.get_plane().get_name(), 'Boeing 767')
         self.assertEqual(self.flight_trip_1.set_plane(plane_2, 'password'), 'wrong password, change denied')
 
+    def test_get_cost(self):
+        self.assertEqual(self.flight_trip_1.get_cost(), 120)
+        self.flight_trip_1.set_cost(180)
+        self.assertEqual(self.flight_trip_1.get_cost(), 180)
+
     def test_add_passenger(self):
         airport_1 = Airport('Madrid')
         staff_1 = Staff('ABC123', 'Susan', 1, airport_1.get_name())

@@ -3,11 +3,13 @@ from app.passenger_class import *
 
 
 class FlightTrip:
-    def __init__(self, origin, destination, duration, plane, passenger_list=None):
+    def __init__(self, origin, destination, duration, plane, passenger_list=None, cost=0):
         self.__origin = origin
         self.__destination = destination
         self.__duration = duration
         self.__plane = plane
+        cost = duration * 60
+        self.__cost = cost
         if passenger_list is None:
             passenger_list = {'staff': [], 'passengers': []}
         self.__passenger_list = passenger_list
@@ -38,6 +40,12 @@ class FlightTrip:
             self.__plane = plane
         else:
             return 'wrong password, change denied'
+
+    def get_cost(self):
+        return self.__cost
+
+    def set_cost(self, cost):
+        self.__cost = cost
 
     def get_passenger_list(self):
         return self.__passenger_list
@@ -118,3 +126,4 @@ class FlightTrip:
     def arrive(self):
         self.get_destination().add_aircraft_to_list(self.get_plane())
         return 'Your plane has safely landed, thank you for travelling!'
+
