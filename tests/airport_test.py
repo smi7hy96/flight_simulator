@@ -20,7 +20,7 @@ class AirportTest(unittest.TestCase):
         self.airport_1.add_aircraft_to_list('Airbus1')
         self.assertEqual(self.airport_1.get_aircraft_list(), ['Airbus1'])
 
-    def test_remove_aircraft_to_list(self):
+    def test_remove_aircraft_from_list(self):
         self.airport_1.set_aircraft_list(['airbus1', 'small jet'])
         self.airport_1.remove_aircraft_from_list('airbus1')
         self.assertEqual(self.airport_1.get_aircraft_list(), ['small jet'])
