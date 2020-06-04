@@ -1,4 +1,6 @@
 from app.aircraft_class import *
 
+
 class Plane(Aircraft):
-    pass
+    def __init__(self, name, capacity):
+        super().__init__(name, capacity)

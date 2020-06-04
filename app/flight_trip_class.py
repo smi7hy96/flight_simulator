@@ -40,17 +40,49 @@ class FlightTrip:
         return self.__passenger_list
 
     def set_passenger_list(self, passenger_list):
-        self.__passenger_list = passenger_list
+        if self.__count_people_in_flight(passenger_list['staff'], passenger_list['passengers']) < self.get_plane().get_capacity():
+            self.__passenger_list = passenger_list
+        else:
+            return 'too many people in list'
 
     def add_passenger_to_flight(self, passenger):
-        if isinstance(passenger, Staff):
-            self.__passenger_list['staff'].append(passenger)
-        if isinstance(passenger, Passenger):
-            self.__passenger_list['passengers'].append(passenger)
+        if self.__count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) < self.get_plane().get_capacity():
+            if isinstance(passenger, Staff):
+                self.__passenger_list['staff'].append(passenger)
+            if isinstance(passenger, Passenger):
+                self.__passenger_list['passengers'].append(passenger)
+        else:
+            return 'flight full'
 
     def remove_passenger_from_flight(self, passenger):
-        if isinstance(passenger, Staff):
-            self.__passenger_list['staff'].remove(passenger)
-        if isinstance(passenger, Passenger):
-            self.__passenger_list['passengers'].remove(passenger)
+        if self.__count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) > 0:
+            if isinstance(passenger, Staff):
+                if self.__check_if_on_flight(passenger, self.__passenger_list['staff']):
+                    self.__passenger_list['staff'].remove(passenger)
+                else:
+                    return 'passenger not on flight'
+            if isinstance(passenger, Passenger):
+                if self.__check_if_on_flight(passenger, self.__passenger_list['passengers']):
+                    self.__passenger_list['passengers'].remove(passenger)
+                else:
+                    return 'passenger not on flight'
+        else:
+            return 'flight already empty'
 
+    def __check_if_on_flight(self, passenger, the_list):
+        for name in the_list:
+            if passenger == name:
+                return True
+        return False
+
+
+    def __count_people_in_flight(self, all_staff, all_passengers):
+        count_total = 0
+        count_staff = 0
+        count_passengers = 0
+        for staff in all_staff:
+            count_staff += 1
+        for passenger in all_passengers:
+            count_passengers =+1
+        count_total = count_staff + count_passengers
+        return count_total

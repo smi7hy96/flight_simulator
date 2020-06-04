@@ -3,4 +3,6 @@ from app.plane_class import *
 
 
 class PlaneTest(unittest.TestCase):
-    pass
+    def setUp(self):
+        plane_1 = Plane('Airbus A380', 250)
+
