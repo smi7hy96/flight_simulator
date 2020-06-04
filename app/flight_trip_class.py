@@ -110,3 +110,11 @@ class FlightTrip:
             count_passengers =+1
         count_total = count_staff + count_passengers
         return count_total
+
+    def departure(self):
+        self.get_origin().remove_aircraft_from_list(self.get_plane())
+        return 'Plane has departed! Enjoy your flight!!'
+
+    def arrive(self):
+        self.get_destination().add_aircraft_to_list(self.get_plane())
+        return 'Your plane has safely landed, thank you for travelling!'

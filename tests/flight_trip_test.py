@@ -8,32 +8,27 @@ from app.plane_class import *
 
 class FlightTripTest(unittest.TestCase):
     def setUp(self):
-        airport_1 = Airport('Madrid')
-        airport_2 = Airport('Gatwick')
         plane_1 = Plane('Airbus A380', 250)
-        self.flight_trip_1 = FlightTrip(airport_2.get_name(), airport_1.get_name(), 2, plane_1)
+        airport_1 = Airport('Madrid')
+        airport_2 = Airport('Gatwick', [plane_1])
+        self.flight_trip_1 = FlightTrip(airport_2, airport_1, 2, plane_1)
 
     def test_get_origin(self):
         airport_3 = Airport('Heathrow')
-        self.assertEqual(self.flight_trip_1.get_origin(), 'Gatwick')
-        self.flight_trip_1.set_origin(airport_3.get_name())
-        self.assertEqual(self.flight_trip_1.get_origin(), 'Heathrow')
+        self.assertEqual(self.flight_trip_1.get_origin().get_name(), 'Gatwick')
+        self.flight_trip_1.set_origin(airport_3)
+        self.assertEqual(self.flight_trip_1.get_origin().get_name(), 'Heathrow')
 
     def test_get_destination(self):
         airport_4 = Airport('Barcelona')
-        self.assertEqual(self.flight_trip_1.get_destination(), 'Madrid')
-        self.flight_trip_1.set_destination(airport_4.get_name())
-        self.assertEqual(self.flight_trip_1.get_destination(), 'Barcelona')
+        self.assertEqual(self.flight_trip_1.get_destination().get_name(), 'Madrid')
+        self.flight_trip_1.set_destination(airport_4)
+        self.assertEqual(self.flight_trip_1.get_destination().get_name(), 'Barcelona')
 
     def test_get_duration(self):
         self.assertEqual(self.flight_trip_1.get_duration(), 2)
         self.flight_trip_1.set_duration(2.5)
         self.assertEqual(self.flight_trip_1.get_duration(), 2.5)
-
-    def test_get_origin(self):
-        self.assertEqual(self.flight_trip_1.get_origin(), 'Gatwick')
-        self.flight_trip_1.set_origin('Heathrow')
-        self.assertEqual(self.flight_trip_1.get_origin(), 'Heathrow')
 
     def test_get_plane(self):
         plane_2 = Plane('Boeing 767', 250)
@@ -91,3 +86,12 @@ class FlightTripTest(unittest.TestCase):
         self.flight_trip_1.add_passenger_to_flight(passenger_1)
         self.assertEqual(self.flight_trip_1.produce_list_of_passengers('adminplane'), 'Peter : 11112222LL')
 
+    def test_departure(self):
+        self.assertEqual(self.flight_trip_1.get_origin().get_aircraft_list()[0].get_name(), 'Airbus A380')
+        self.assertEqual(self.flight_trip_1.departure(), 'Plane has departed! Enjoy your flight!!')
+        self.assertEqual(self.flight_trip_1.get_origin().get_aircraft_list(), [])
+
+    def test_arrive(self):
+        self.flight_trip_1.departure()
+        self.assertEqual(self.flight_trip_1.arrive(), 'Your plane has safely landed, thank you for travelling!')
+        self.assertEqual(self.flight_trip_1.get_destination().get_aircraft_list()[0].get_name(), 'Airbus A380')
