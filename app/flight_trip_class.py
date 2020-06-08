@@ -48,6 +48,10 @@ class FlightTrip:
     def get_passenger_list(self):
         return self.__passenger_list
 
+    def get_revenue(self):
+        num_of_passengers = len(self.get_passenger_list()['passengers'])
+        return self.get_cost() * num_of_passengers
+
     def set_passenger_list(self, passenger_list):
         if self.count_people_in_flight(passenger_list['staff'], passenger_list['passengers']) < self.get_plane().get_capacity():
             self.__passenger_list = passenger_list

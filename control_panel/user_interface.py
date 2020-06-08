@@ -1,12 +1,13 @@
 from control_panel.preset_variables import *
 from control_panel.run_functions import *
+from control_panel.phsh import *
 import time
 
 print('WELCOME! You have the honour of joining the most prestigious airline in the world! CONGRATS!')
 time.sleep(1)
 print('As our new admin, you will be in charge of managing the airports, planes, staff and passengers in our database. \nAnd then letting our holidaymakers take flight!!')
 time.sleep(0.5)
-print("Your password will be 'adminplane' if you need to make changes to details of a flight. \n What would you like to do first?")
+print("Your password will be 'adminplane' to log in.")
 
 
 def print_panel():
@@ -17,7 +18,15 @@ def print_panel():
     print("4) Passenger Settings")
     print("5) Make a flight!")
 
-
+pword_verified = False
+while not pword_verified:
+    user_access_attempt = input("Please Enter Password: \n")
+    if verify_password(user_access_attempt):
+        print("Password Accepted")
+        pword_verified = True
+    else:
+        print("Password Incorrect")
+print("Welcome! What would you like to do first? \n")
 print_panel()
 exit_code = False
 while not exit_code:
