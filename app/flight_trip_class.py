@@ -114,7 +114,7 @@ class FlightTrip:
         for staff in all_staff:
             count_staff += 1
         for passenger in all_passengers:
-            count_passengers =+1
+            count_passengers += 1
         count_total = count_staff + count_passengers
         return count_total
 

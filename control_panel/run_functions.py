@@ -9,6 +9,14 @@ def check_if_number(number):
         return False
 
 
+def check_if_float(number):
+    try:
+        float(number)
+        return True
+    except ValueError:
+        return False
+
+
 def check_admin_choice(number):
     if number == 1:
         airport_settings_choice()
@@ -420,8 +428,8 @@ def add_flight():
     duration_check = False
     while not duration_check:
         duration = input("How long will the flight be?")
-        if check_if_number(duration):
-            flight_list.append(FlightTrip(origin, destination, int(duration), a_plane))
+        if check_if_float(duration):
+            flight_list.append(FlightTrip(origin, destination, float(duration), a_plane))
             duration_check = True
         else:
             print("Invalid Number")
@@ -656,7 +664,7 @@ def change_plane():
 def get_all_flights():
     if len(flight_list) > 0:
         for x in range(1, len(flight_list) + 1):
-            return f'{x}) Flying from {flight_list[x - 1].get_origin().get_name()} to {flight_list[x - 1].get_destination().get_name()}, duration: {flight_list[x - 1].get_duration()} hours, profit (once completed): £{flight_list[x - 1].get_revenue()} \n'
+            print(f'{x}) Flying from {flight_list[x - 1].get_origin().get_name()} to {flight_list[x - 1].get_destination().get_name()}, duration: {flight_list[x - 1].get_duration()} hours, profit (once completed): £{flight_list[x - 1].get_revenue()} \n')
     else:
         return "No available flights"
 
@@ -664,7 +672,7 @@ def get_all_flights():
 def get_completed_flights():
     if len(completed_flights) > 0:
         for x in range(1, len(completed_flights) + 1):
-            return f'{x}) Flying from {completed_flights[x - 1].get_origin().get_name()} to {completed_flights[x - 1].get_destination().get_name()}, duration: {completed_flights[x - 1].get_duration()} hours, profit: £{completed_flights[x - 1].get_revenue()}  \n'
+            print(f'{x}) Flying from {completed_flights[x - 1].get_origin().get_name()} to {completed_flights[x - 1].get_destination().get_name()}, duration: {completed_flights[x - 1].get_duration()} hours, profit: £{completed_flights[x - 1].get_revenue()}  \n')
     else:
         return "No completed flights"
 

@@ -4,7 +4,7 @@ from app.staff_class import *
 from app.passenger_class import *
 from app.flight_trip_class import *
 
-plane_1 = Plane('Airbus A380', 250)
+plane_1 = Plane('Airbus A380', 200)
 plane_2 = Plane('Airbus A220', 20)
 plane_3 = Plane('Boeing 747', 160)
 airport_1 = Airport('Madrid')
