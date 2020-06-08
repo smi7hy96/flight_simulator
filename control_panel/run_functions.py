@@ -11,8 +11,8 @@ def check_if_number(number):
 def check_admin_choice(number):
     if number == 1:
         airport_settings_choice()
-    # elif number == 2:
-    #     plane_settings_choice()
+    elif number == 2:
+        plane_settings_choice()
     # elif number == 3:
     #     staff_settings_choice()
     # elif number == 4:
@@ -138,3 +138,63 @@ def check_airport_choice(number):
         print(remove_plane_from_airport())
     elif number == 5:
         print(get_all_airports())
+
+
+def print_plane_panel():
+    print("AIRPORT CONTROL: \n")
+    print("1) Add Plane")
+    print("2) Get Capacity")
+    print("3) Get List of Planes")
+
+
+def plane_settings_choice():
+    print_plane_panel()
+    back_code = False
+    while not back_code:
+        user_choice = input(
+            "Pick a number 1-3 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+        if user_choice == 'back':
+            back_code = True
+        else:
+            if check_if_number(user_choice):
+                check_plane_choice(int(user_choice))
+                print_plane_panel()
+
+
+def check_plane_choice(number):
+    if number == 1:
+        print(add_plane())
+    elif number == 2:
+        print(get_capacity())
+    elif number == 3:
+        print(get_all_planes())
+
+
+def add_plane():
+    name = input("Enter name of the new Plane \n")
+    input_check = False
+    while not input_check:
+        capacity = input(f'Enter capacity of the {name} \n')
+        if check_if_number(capacity):
+            plane_list.append(Plane(name, int(capacity)))
+            input_check = True
+    return f'{name} added'
+
+
+def get_all_planes():
+    planes_names = []
+    for plane in plane_list:
+        planes_names.append(plane.get_name())
+    return planes_names
+
+def get_capacity():
+    for x in range(1, len(plane_list) + 1):
+        print(f'{x}) {plane_list[x-1].get_name()} \n')
+    user_choice = input("Pick a plane using the number guide \n")
+    if check_if_number(user_choice):
+        if int(user_choice) <= len(plane_list):
+            return plane_list[int(user_choice) - 1].get_capacity()
+        else:
+            return "Invalid number selected"
+    else:
+        return "Invalid number selected"
