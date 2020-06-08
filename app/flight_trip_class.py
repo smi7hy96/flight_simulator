@@ -23,6 +23,7 @@ class FlightTrip:
     def get_destination(self):
         return self.__destination
 
+
     def set_destination(self, destination):
         self.__destination = destination
 
@@ -35,11 +36,8 @@ class FlightTrip:
     def get_plane(self):
         return self.__plane
 
-    def set_plane(self, plane, password):
-        if password == 'adminplane':
-            self.__plane = plane
-        else:
-            return 'wrong password, change denied'
+    def set_plane(self, plane):
+        self.__plane = plane
 
     def get_cost(self):
         return self.__cost
@@ -51,13 +49,13 @@ class FlightTrip:
         return self.__passenger_list
 
     def set_passenger_list(self, passenger_list):
-        if self.__count_people_in_flight(passenger_list['staff'], passenger_list['passengers']) < self.get_plane().get_capacity():
+        if self.count_people_in_flight(passenger_list['staff'], passenger_list['passengers']) < self.get_plane().get_capacity():
             self.__passenger_list = passenger_list
         else:
             return 'too many people in list'
 
     def add_passenger_to_flight(self, passenger):
-        if self.__count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) < self.get_plane().get_capacity():
+        if self.count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) < self.get_plane().get_capacity():
             if isinstance(passenger, Staff):
                 self.__passenger_list['staff'].append(passenger)
             if isinstance(passenger, Passenger):
@@ -66,7 +64,7 @@ class FlightTrip:
             return 'flight full'
 
     def remove_passenger_from_flight(self, passenger):
-        if self.__count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) > 0:
+        if self.count_people_in_flight(self.get_passenger_list()['staff'], self.get_passenger_list()['passengers']) > 0:
             if isinstance(passenger, Staff):
                 if self.__check_if_on_flight(passenger, self.__passenger_list['staff']):
                     self.__passenger_list['staff'].remove(passenger)
@@ -86,15 +84,12 @@ class FlightTrip:
                 return True
         return False
 
-    def produce_list_of_passengers(self, password):
-        if password == 'adminplane':
-            names = self.__get_all_passenger_names()
-            passport_nos = self.__get_all_passenger_passports()
-            for x in range(len(names)):
-                names[x] = names[x] + " : " + passport_nos[x]
-            return '\n'.join(names)
-        else:
-            return 'wrong password, change denied'
+    def produce_list_of_passengers(self):
+        names = self.__get_all_passenger_names()
+        passport_nos = self.__get_all_passenger_passports()
+        for x in range(len(names)):
+            names[x] = names[x] + " : " + passport_nos[x]
+        return '\n'.join(names)
 
     def __get_all_passenger_names(self):
         names_list = []
@@ -108,7 +103,7 @@ class FlightTrip:
             passport_list.append(passport.get_passport_no())
         return passport_list
 
-    def __count_people_in_flight(self, all_staff, all_passengers):
+    def count_people_in_flight(self, all_staff, all_passengers):
         count_total = 0
         count_staff = 0
         count_passengers = 0
