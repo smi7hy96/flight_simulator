@@ -13,8 +13,8 @@ def check_admin_choice(number):
         airport_settings_choice()
     elif number == 2:
         plane_settings_choice()
-    # elif number == 3:
-    #     staff_settings_choice()
+    elif number == 3:
+        staff_settings_choice()
     # elif number == 4:
     #     passenger_settings_choice()
     # elif number == 5:
@@ -141,7 +141,7 @@ def check_airport_choice(number):
 
 
 def print_plane_panel():
-    print("AIRPORT CONTROL: \n")
+    print("PLANE CONTROL: \n")
     print("1) Add Plane")
     print("2) Get Capacity")
     print("3) Get List of Planes")
@@ -187,6 +187,7 @@ def get_all_planes():
         planes_names.append(plane.get_name())
     return planes_names
 
+
 def get_capacity():
     for x in range(1, len(plane_list) + 1):
         print(f'{x}) {plane_list[x-1].get_name()} \n')
@@ -198,3 +199,80 @@ def get_capacity():
             return "Invalid number selected"
     else:
         return "Invalid number selected"
+
+def print_staff_panel():
+    print("STAFF CONTROL: \n")
+    print("1) Add Staff")
+    print("2) Get Work Location")
+    print("3) Get List of Staff")
+
+
+def staff_settings_choice():
+    print_staff_panel()
+    back_code = False
+    while not back_code:
+        user_choice = input(
+            "Pick a number 1-3 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+        if user_choice == 'back':
+            back_code = True
+        else:
+            if check_if_number(user_choice):
+                check_staff_choice(int(user_choice))
+                print_staff_panel()
+
+
+def check_staff_choice(number):
+    if number == 1:
+        print(add_staff())
+    elif number == 2:
+        print(get_work_location())
+    elif number == 3:
+        print(get_all_staff())
+
+
+def add_staff():
+    name = input("Enter name of the new Staff Member \n")
+    tax = input(f'Enter Tax No. for {name} \n')
+    for x in range(1, len(airport_list) + 1):
+        print(f'{x}) {airport_list[x - 1].get_name()} \n')
+    airport_selection = False
+    while not airport_selection:
+        user_choice = input(f'Enter Location for {name} using number guide of airport\n')
+        if check_if_number(user_choice):
+            if int(user_choice) <= len(airport_list):
+                selected_airport = airport_list[int(user_choice)-1]
+                print(f'{selected_airport.get_name()} Selected \n')
+                location = selected_airport.get_name()
+                airport_selection = True
+            else:
+                print("Invalid number selected")
+        else:
+            print("Invalid number selected")
+
+    input_check = False
+    while not input_check:
+        emp_no = input(f'Enter Employee No. for {name} \n')
+        if check_if_number(emp_no):
+            staff_list.append(Staff(tax, name, int(emp_no), location))
+            input_check = True
+    return f'{name} added'
+
+
+def get_work_location():
+    for x in range(1, len(staff_list) + 1):
+        print(f'{x}) {staff_list[x-1].get_name()} (Emp No: {staff_list[x-1].get_employee_no()})\n')
+    user_choice = input("Pick an Employee using the number guide \n")
+    if check_if_number(user_choice):
+        if int(user_choice) <= len(staff_list):
+            return staff_list[int(user_choice) - 1].get_work_location()
+        else:
+            return "Invalid number selected"
+    else:
+        return "Invalid number selected"
+
+
+def get_all_staff():
+    staff_names = []
+    for staff in staff_list:
+        staff_names.append(staff.get_name())
+    return staff_names
