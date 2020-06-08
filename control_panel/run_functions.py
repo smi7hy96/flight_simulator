@@ -15,8 +15,8 @@ def check_admin_choice(number):
         plane_settings_choice()
     elif number == 3:
         staff_settings_choice()
-    # elif number == 4:
-    #     passenger_settings_choice()
+    elif number == 4:
+        passenger_settings_choice()
     # elif number == 5:
     #     make_a_flight_choice()
 
@@ -276,3 +276,44 @@ def get_all_staff():
     for staff in staff_list:
         staff_names.append(staff.get_name())
     return staff_names
+
+def print_passenger_panel():
+    print("PASSENGER CONTROL: \n")
+    print("1) Add Passenger")
+    print("2) Get List of Passengers")
+
+
+def passenger_settings_choice():
+    print_passenger_panel()
+    back_code = False
+    while not back_code:
+        user_choice = input(
+            "Pick a number 1-2 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+        if user_choice == 'back':
+            back_code = True
+        else:
+            if check_if_number(user_choice):
+                check_passenger_choice(int(user_choice))
+                print_passenger_panel()
+
+
+def check_passenger_choice(number):
+    if number == 1:
+        print(add_passenger())
+    elif number == 2:
+        print(get_all_passengers())
+
+
+def add_passenger():
+    name = input("Enter name of the new Passenger \n")
+    tax = input(f'Enter Tax No. for {name} \n')
+    passport = input(f'Enter Passport No. for {name} \n')
+    passenger_list.append(Passenger(tax, name, passport))
+    return f'{name} added'
+
+
+def get_all_passengers():
+    passenger_names = []
+    for passenger in passenger_list:
+        passenger_names.append(passenger.get_name())
+    return passenger_names
