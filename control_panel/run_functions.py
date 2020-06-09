@@ -43,8 +43,8 @@ def get_planes_in_airport():
     planes = []
     if check_if_number(user_choice):
         if int(user_choice) <= len(airport_list):
-            for plane in airport_list[int(user_choice)-1].get_aircraft_list():
-                planes.append(plane.get_name())
+            for plane in airport_list[int(user_choice)-1].aircraft_quantities():
+                planes.append(plane)
             if len(planes) == 0:
                 planes = "No planes currently at this airport"
             return planes
@@ -55,6 +55,7 @@ def get_planes_in_airport():
 
 
 def add_plane_to_airport():
+    temp_list = []
     for x in range(1, len(airport_list) + 1):
         print(f'{x}) {airport_list[x - 1].get_name()} \n')
     user_choice = input("Pick an airport using the number guide \n")
@@ -63,12 +64,18 @@ def add_plane_to_airport():
             selected_airport = airport_list[int(user_choice)-1]
             print(f'{selected_airport.get_name()} Selected \n')
             for x in range(1, len(plane_list) + 1):
-                print(f'{x}) {plane_list[x - 1].get_name()} \n')
+                if plane_list[x-1].get_available() > 0:
+                    temp_list.append(plane_list[x - 1])
+
+            if len(temp_list) == 0:
+                return "No more planes available, need to purchase more"
+            for y in range(1, len(temp_list) + 1):
+                print(f'{y}) {temp_list[y - 1].get_name()} \n')
             user_choice = input("Now pick a plane to add \n")
             if check_if_number(user_choice):
-                if int(user_choice) <= len(plane_list):
-                    selected_airport.add_aircraft_to_list(plane_list[int(user_choice)-1])
-                    return f'{plane_list[int(user_choice)-1].get_name()} added'
+                if int(user_choice) <= len(temp_list):
+                    selected_airport.add_aircraft_to_list(temp_list[int(user_choice)-1])
+                    return f'{temp_list[int(user_choice)-1].get_name()} added'
                 else:
                     return "Invalid number selected"
             else:
@@ -151,9 +158,10 @@ def check_airport_choice(number):
 
 def print_plane_panel():
     print("PLANE CONTROL: \n")
-    print("1) Add Plane")
-    print("2) Get Capacity")
-    print("3) Get List of Planes")
+    print("1) Buy New Plane")
+    print("2) Buy More Planes")
+    print("3) Get Capacity")
+    print("4) Get List of Planes")
 
 
 def plane_settings_choice():
@@ -161,7 +169,7 @@ def plane_settings_choice():
     back_code = False
     while not back_code:
         user_choice = input(
-            "Pick a number 1-3 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+            "Pick a number 1-4 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
         if user_choice == 'back':
             back_code = True
         else:
@@ -174,40 +182,76 @@ def check_plane_choice(number):
     if number == 1:
         print(add_plane())
     elif number == 2:
-        print(get_capacity())
+        print(add_more_planes())
     elif number == 3:
+        print(get_capacity())
+    elif number == 4:
         print(get_all_planes())
 
 
 def add_plane():
     name = input("Enter name of the new Plane \n")
+    for x in range(len(plane_list)):
+        if name == plane_list[x].get_name():
+            return "Plane already in fleet, try buying more instead"
     input_check = False
     while not input_check:
         capacity = input(f'Enter capacity of the {name} \n')
         if check_if_number(capacity):
-            plane_list.append(Plane(name, int(capacity)))
+            input_check = True
+    input_check = False
+    while not input_check:
+        quantity = input(f'Enter Quantity of the {name} \n')
+        if check_if_number(quantity):
+            plane_list.append(Plane(name, int(capacity), int(quantity), int(quantity)))
             input_check = True
     return f'{name} added'
+
+
+def add_more_planes():
+    for x in range(1, len(plane_list) + 1):
+        print(f'{x}) {plane_list[x-1].get_name()} \n')
+    user_correct = False
+    while not user_correct:
+        user_choice = input("Pick a plane using the number guide \n")
+        if check_if_number(user_choice):
+            if int(user_choice) <= len(plane_list):
+                selected_plane = plane_list[int(user_choice) - 1]
+                user_correct = True
+            else:
+                return "Invalid number selected"
+        else:
+            return "Invalid number selected"
+    user_correct = False
+    while not user_correct:
+        quantity = input(f'How many {selected_plane.get_name()} do you want to purchase? \n')
+        if check_if_number(user_choice):
+            selected_plane.buy_planes(int(quantity))
+        else:
+            return "Invalid number selected"
 
 
 def get_all_planes():
     planes_names = []
     for plane in plane_list:
-        planes_names.append(plane.get_name())
+        planes_names.append(f'{plane.get_name()}, {plane.get_available()} available')
     return planes_names
 
 
 def get_capacity():
     for x in range(1, len(plane_list) + 1):
         print(f'{x}) {plane_list[x-1].get_name()} \n')
-    user_choice = input("Pick a plane using the number guide \n")
-    if check_if_number(user_choice):
-        if int(user_choice) <= len(plane_list):
-            return plane_list[int(user_choice) - 1].get_capacity()
+    input_correct = False
+    while not input_correct:
+        user_choice = input("Pick a plane using the number guide \n")
+        if check_if_number(user_choice):
+            if int(user_choice) <= len(plane_list):
+                input_correct = True
+                return plane_list[int(user_choice) - 1].get_capacity()
+            else:
+                return "Invalid number selected"
         else:
             return "Invalid number selected"
-    else:
-        return "Invalid number selected"
 
 
 def print_staff_panel():
@@ -215,6 +259,7 @@ def print_staff_panel():
     print("1) Add Staff")
     print("2) Get Work Location")
     print("3) Get List of Staff")
+    print("4) Remove Member of Staff")
 
 
 def staff_settings_choice():
@@ -222,7 +267,7 @@ def staff_settings_choice():
     back_code = False
     while not back_code:
         user_choice = input(
-            "Pick a number 1-3 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+            "Pick a number 1-4 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
         if user_choice == 'back':
             back_code = True
         else:
@@ -238,6 +283,8 @@ def check_staff_choice(number):
         print(get_work_location())
     elif number == 3:
         print(get_all_staff())
+    elif number == 4:
+        print(remove_staff())
 
 
 def add_staff():
@@ -288,10 +335,26 @@ def get_all_staff():
     return staff_names
 
 
+def remove_staff():
+    for x in range(1, len(staff_list) + 1):
+        print(f'{x}) {staff_list[x-1].get_name()} (Emp No: {staff_list[x-1].get_employee_no()})\n')
+    user_choice = input("Pick an Employee using the number guide \n")
+    if check_if_number(user_choice):
+        if int(user_choice) <= len(staff_list):
+            staff_member = staff_list[int(user_choice) - 1]
+            staff_list.remove(staff_member)
+            return f'{staff_member.get_name()} removed from company'
+        else:
+            return "Invalid number selected"
+    else:
+        return "Invalid number selected"
+
+
 def print_passenger_panel():
     print("PASSENGER CONTROL: \n")
     print("1) Add Passenger")
     print("2) Get List of Passengers")
+    print("3) Remove Passenger from Database")
 
 
 def passenger_settings_choice():
@@ -299,7 +362,7 @@ def passenger_settings_choice():
     back_code = False
     while not back_code:
         user_choice = input(
-            "Pick a number 1-2 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+            "Pick a number 1-3 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
         if user_choice == 'back':
             back_code = True
         else:
@@ -313,6 +376,8 @@ def check_passenger_choice(number):
         print(add_passenger())
     elif number == 2:
         print(get_all_passengers())
+    elif number == 3:
+        print(remove_passenger())
 
 
 def add_passenger():
@@ -328,6 +393,21 @@ def get_all_passengers():
     for passenger in passenger_list:
         passenger_names.append(passenger.get_name())
     return passenger_names
+
+
+def remove_passenger():
+    for x in range(1, len(passenger_list) + 1):
+        print(f'{x}) {passenger_list[x-1].get_name()} (Passport No: {passenger_list[x-1].get_passport_no()})\n')
+    user_choice = input("Pick a Passenger using the number guide \n")
+    if check_if_number(user_choice):
+        if int(user_choice) <= len(staff_list):
+            passenger = passenger_list[int(user_choice) - 1]
+            passenger_list.remove(passenger)
+            return f'{passenger.get_name()} removed from company'
+        else:
+            return "Invalid number selected"
+    else:
+        return "Invalid number selected"
 
 
 def print_flight_panel():
@@ -350,7 +430,7 @@ def flight_settings_choice():
     back_code = False
     while not back_code:
         user_choice = input(
-            "Pick a number 1-9 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
+            "Pick a number 1-11 to navigate the menu. type 'back' if you want to return to the Admin menu \n")
         if user_choice == 'back':
             back_code = True
         else:
@@ -375,7 +455,7 @@ def check_flight_choice(number):
     elif number == 7:
         print(change_plane())
     elif number == 8:
-        print(get_all_flights())
+        get_all_flights()
     elif number == 9:
         print(get_completed_flights())
     elif number == 10:
@@ -386,6 +466,7 @@ def check_flight_choice(number):
 
 def add_flight():
     temp_airports = list(airport_list)
+    temp_planes = []
     origin = ''
     destination = ''
     a_plane = ''
@@ -399,11 +480,16 @@ def add_flight():
             temp_airports.remove(selected_airport)
             print(f'{selected_airport.get_name()} Selected \n')
             for x in range(1, len(plane_list) + 1):
-                print(f'{x}) {plane_list[x - 1].get_name()} \n')
+                if plane_list[x - 1] in selected_airport.get_aircraft_list():
+                    temp_planes.append(plane_list[x-1])
+            if len(temp_planes) == 0:
+                return "No planes currently available"
+            for y in range(1, len(temp_planes) + 1):
+                print(f'{y}) {temp_planes[y - 1].get_name()} \n')
             user_choice = input("Now pick a plane to use \n")
             if check_if_number(user_choice):
-                if int(user_choice) <= len(plane_list):
-                    a_plane = plane_list[int(user_choice)-1]
+                if int(user_choice) <= len(temp_planes):
+                    a_plane = temp_planes[int(user_choice)-1]
                 else:
                     print("Invalid number selected")
             else:
@@ -480,12 +566,11 @@ def remove_passenger_from_flight():
     flight_num = False
     for x in range(1, len(flight_list) + 1):
         if flight_list[x - 1].count_people_in_flight(flight_list[x - 1].get_passenger_list()['staff'],
-                                                     flight_list[x - 1].get_passenger_list()['passengers']) < \
-                flight_list[x - 1].get_plane().get_capacity():
+                                                     flight_list[x - 1].get_passenger_list()['passengers']) > 0:
             print(
                 f'{x}) Flying from {flight_list[x - 1].get_origin().get_name()} to {flight_list[x - 1].get_destination().get_name()}\n')
         else:
-            return "All flights already full!"
+            return "All flights already empty!"
     while not flight_num:
         user_choice = input("Pick a Flight to remove Passenger from using the number guide \n")
         if check_if_number(user_choice):
@@ -600,12 +685,14 @@ def remove_staff_from_flight():
 
 def get_all_passengers_in_flight():
     flight_num = False
+    results = False
     for x in range(1, len(flight_list) + 1):
         if len(flight_list[int(x) - 1].get_passenger_list()['passengers']) > 0:
+            results = True
             print(
                 f'{x}) Flying from {flight_list[x - 1].get_origin().get_name()} to {flight_list[x - 1].get_destination().get_name()}\n')
-        else:
-            return "All flights empty!"
+    if not results:
+        return "All flights empty!"
     while not flight_num:
         user_choice = input("Pick a Flight to get Passengers to using the number guide \n")
         if check_if_number(user_choice):
@@ -623,6 +710,7 @@ def change_plane():
     current_plane = ''
     current_flight = ''
     temp_plane_list = list(plane_list)
+    another_plane_list = []
     if len(flight_list) > 0:
         for x in range(1, len(flight_list) + 1):
             print(f'{x}) Flying from {flight_list[x - 1].get_origin().get_name()} to {flight_list[x - 1].get_destination().get_name()}\n')
@@ -641,14 +729,19 @@ def change_plane():
         temp_plane_list.remove(current_plane)
         if len(temp_plane_list) > 0:
             for x in range(1, len(temp_plane_list) + 1):
-                print(f'{x}) {temp_plane_list[x-1].get_name()}')
+                if temp_plane_list[x-1] in current_flight.get_origin().get_aircraft_list():
+                    another_plane_list.append(temp_plane_list[x-1])
+            if len(another_plane_list) == 0:
+                return "No other planes to choose"
+            for y in range(1, len(another_plane_list) + 1):
+                print(f'{y}) {another_plane_list[y-1].get_name()}')
             plane_num = False
             while not plane_num:
                 user_choice = input("Pick a new plane using the number guide \n")
                 if check_if_number(user_choice):
-                    if int(user_choice) <= len(temp_plane_list):
+                    if int(user_choice) <= len(another_plane_list):
                         plane_num = True
-                        new_plane = temp_plane_list[int(user_choice)-1]
+                        new_plane = another_plane_list[int(user_choice)-1]
                         current_flight.set_plane(new_plane)
                         return f'New plane is the {new_plane.get_name()}'
                     else:

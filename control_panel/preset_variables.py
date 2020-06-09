@@ -4,9 +4,9 @@ from app.staff_class import *
 from app.passenger_class import *
 from app.flight_trip_class import *
 
-plane_1 = Plane('Airbus A380', 200)
-plane_2 = Plane('Airbus A220', 20)
-plane_3 = Plane('Boeing 747', 160)
+plane_1 = Plane('Airbus A380', 200, 1, 0)
+plane_2 = Plane('Airbus A220', 20, 2, 1)
+plane_3 = Plane('Boeing 747', 160, 1, 1)
 airport_1 = Airport('Madrid')
 airport_2 = Airport('Gatwick', [plane_1, plane_2])
 staff_1 = Staff('ABC123', 'Susan', 1, airport_2.get_name())

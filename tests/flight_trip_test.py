@@ -33,9 +33,8 @@ class FlightTripTest(unittest.TestCase):
     def test_get_plane(self):
         plane_2 = Plane('Boeing 767', 250)
         self.assertEqual(self.flight_trip_1.get_plane().get_name(), 'Airbus A380')
-        self.flight_trip_1.set_plane(plane_2, 'adminplane')
+        self.flight_trip_1.set_plane(plane_2)
         self.assertEqual(self.flight_trip_1.get_plane().get_name(), 'Boeing 767')
-        self.assertEqual(self.flight_trip_1.set_plane(plane_2, 'password'), 'wrong password, change denied')
 
     def test_get_cost(self):
         self.assertEqual(self.flight_trip_1.get_cost(), 120)
@@ -57,7 +56,7 @@ class FlightTripTest(unittest.TestCase):
         staff_1 = Staff('ABC123', 'Susan', 1, airport_1.get_name())
         plane_2 = Plane('Airbus1', 0)
         pass_list = {'staff': [staff_1], 'passengers': []}
-        self.flight_trip_1.set_plane(plane_2, 'adminplane')
+        self.flight_trip_1.set_plane(plane_2)
         self.assertEqual(self.flight_trip_1.add_passenger_to_flight(staff_1), 'flight full')
         self.assertEqual(self.flight_trip_1.set_passenger_list(pass_list), 'too many people in list')
 
@@ -89,7 +88,7 @@ class FlightTripTest(unittest.TestCase):
     def test_produce_list(self):
         passenger_1 = Passenger('DEF456', 'Peter', '11112222LL')
         self.flight_trip_1.add_passenger_to_flight(passenger_1)
-        self.assertEqual(self.flight_trip_1.produce_list_of_passengers('adminplane'), 'Peter : 11112222LL')
+        self.assertEqual(self.flight_trip_1.produce_list_of_passengers(), 'Peter : 11112222LL')
 
     def test_departure(self):
         self.assertEqual(self.flight_trip_1.get_origin().get_aircraft_list()[0].get_name(), 'Airbus A380')

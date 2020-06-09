@@ -8,5 +8,5 @@ class PassengerTest(unittest.TestCase):
 
     def test_get_passport_no(self):
         self.assertEqual(self.passenger_1.get_passport_no(), '55566ABC')
-        self.passenger_1.set_employee_no(2)
-        self.assertEqual(self.passenger_1.get_employee_no(), 2)
+        self.passenger_1.set_passport_no(2)
+        self.assertEqual(self.passenger_1.get_passport_no(), 2)

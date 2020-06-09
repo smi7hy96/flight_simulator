@@ -4,7 +4,7 @@ from app.aircraft_class import *
 
 class AircraftTest(unittest.TestCase):
     def setUp(self):
-        self.aircraft_1 = Aircraft('Airbus A380', 200)
+        self.aircraft_1 = Aircraft('Airbus A380', 200, 5, 5)
 
     def test_get_name(self):
         self.assertEqual(self.aircraft_1.get_name(), 'Airbus A380')
