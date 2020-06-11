@@ -227,6 +227,7 @@ def add_more_planes():
         quantity = input(f'How many {selected_plane.get_name()} do you want to purchase? \n')
         if check_if_number(user_choice):
             selected_plane.buy_planes(int(quantity))
+            user_correct = True
         else:
             return "Invalid number selected"
 
